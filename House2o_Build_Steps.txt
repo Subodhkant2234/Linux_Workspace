@@ -1,0 +1,52 @@
+##############################################################################################################
+#                     To Build on Ubuntu 14.04                                                               #
+##############################################################################################################
+
+1.      you need to install the following package dependencies on system.
+	$sudo apt-get install make unrar autoconf automake libtool gcc g++ gperf \
+	flex bison texinfo gawk ncurses-dev libexpat-dev python python-serial sed \
+	git
+
+2.	Create a folder named Espressif in /opt path 
+	$mkdir /opt/Espressif
+	$sudo chown -R <username> /opt/Espressif
+	Go to Espressif folder and Clone the source code  recursively.
+	$sudo git clone --recursive https://github.com/pfalcon/esp-open-sdk.git	
+
+3.	To Build the SDK.
+
+	a)Build the separated SDK
+	  $make STANDALONE=n
+
+	b)Build the standalone SDK
+	$make STANDALONE=y
+
+NOTE:   One need to build standalone SDK as given in 3(b).
+	Once done, the toolchain (with the Xtensa HAL library) will be available in the xtensa-lx106-elf/ directory.
+
+	Add its bin/ subdirectory to your $PATH to execute xtensa-lx106-elf-gcc and other tools as 
+	$export PATH=/opt/Espressif/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
+
+4.	Go to top directory of source code and run the following commands on terminal
+	$cd /opt/Espressif/esp-open-sdk
+	$ln -s `which xtensa-lx106-elf-nm`  `dirname \`which xtensa-lx106-elf-nm\``/xt-nm
+	$mv Makefile Makefile.old 
+
+5.	Make changes Related to Makefile in IOT_Demo folder for LD and some environment path.
+
+6.	Create soft link path:
+	/opt/Espressif/esp-open-sdk/esp_iot_sdk_v1.4.0/examples
+	for bin,ld,tools
+
+7.	Now go to IoT_Demo folder, which is inside of examples folder.
+	$ cd  /opt/Espressif/esp-open-sdk/esp_iot_sdk_v1.4.0/examples
+
+	Run $make  to build this project with default SPI flash parameters.
+	To build this with custom SPI flash parameters, one need to run a script and give input to it.
+	$chmod a+x gen_misc.sh
+	$source gen_misc.sh
+
+	To clean the built files
+	$ make clean
+
+
