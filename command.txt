@@ -1,0 +1,86 @@
+1. git checkout
+
+Another common question is “How do I undo an unstaged/uncommitted change? I just want to roll my file back…”. git checkout — filename handles this:
+$ git checkout -- README 
+
+This will roll the README file back to the last committed version in the working directory. Another question after I answer this is, “Why do you have to put the two dashes there?” The two dashes are canonically called the “bare double dashes”. The reason they are there is because it ensures that the checkout command know that we are trying to roll back a file and not change branches. Remember that the typical usage of the checkout command is to change branches. If you had a branch called README, this command:
+
+$ git checkout README 
+
+would checkout the README branch and not rollback the current README file in the working directory.
+
+2. git commit —amend
+
+git commit —amend is another command that allows you to change your last commit. Say I forgot to stage a file for the commit and I need to edit the commit message:
+
+$ git commit -m 'initial commit' 
+$ git add awesome_file
+$ git commit --amend
+
+3.
+WARNING: git clean -f will remove untracked files, meaning they're gone for good since they aren't stored in the repository. Make sure you really want to remove all untracked files before doing this.
+
+4.The documentation for git diff says "--staged is a synonym of --cached", so yes.
+
+    git diff HEAD - Shows what has changed since the last commit.
+    git diff HEAD^ - Shows what has changed since the commit before the latest commit.
+    git diff --cached - Show what has been added to the index via git add but not yet committed.
+    git diff - Show what has changed but hasn't been added to the index yet via git add.
+
+It looks like this:
+Working Directory    <----+--------+-------+
+        |                 |        |       |
+        |              diff HEAD   |       |
+        V                 |        |       |
+   "git add"              |        |       |
+        |                 |        |     diff
+        |                 |        |       |
+        V                 |        |       |
+     Index     <----+-----|--------|-------+
+        |           |     |        |       
+        |   diff --cached |        |       
+        V           |     |        |       
+  "git commit"      |     |        |
+        |           |     |        |
+        |           |     |        |
+        V           |     |        |
+      HEAD     <----+-----+        |
+        |                          |
+        |                       diff HEAD^
+        V                          |
+previous "git commit"              |
+        |                          |
+        |                          |
+        V                          |
+      HEAD^          <-------------+
+
+
+5.	To Undo last commit that is not yet pushed and changes remain to be in working directory. 
+	git reset --soft HEAD^
+
+	To undo last commit that is not yet pushed and do not retain the chnages
+	git reset --hard HEAD^
+
+6. 
+	git rm will remove the file from the index and working directory ( only index if you used --cached ) so that the deletion is staged for next commit.
+
+	$git rm filename
+	$git rm --cached filename(To unstage the file from index)
+
+7. $git commit : It Will open a window, then enter the commit message and save it.
+	$git add file.txt: To stage the file name file.txt
+
+8. Commited and messed with commit message and want to modify the previous commit or fix it without any other commit history(modify a commit msg without doing any other commit).
+	$git commit --amend
+
+9 	$git log --stat(To see the file chnages with in the commit)
+
+10. git clean -df (to remove untracked directory/files in working directory)
+
+11. git reflog(all commit walk through)
+
+12. git diff <prev commit ID 6-7 digit> <current commit ID 6-7 digit>
+	 
+
+
+
